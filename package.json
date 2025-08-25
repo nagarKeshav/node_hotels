@@ -4,15 +4,19 @@
   "description": "it is node tutorial",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "dev": "nodemon server.js"
   },
   "author": "keshav nagar",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^2.2.0",
+    "dotenv": "^16.3.1",
     "express": "^5.1.0",
     "lodash": "^4.17.21",
-    "mongoose": "^8.16.4",
+    "mongodb": "^5.7.0",
+    "mongoose": "^7.4.1",
     "nodemon": "^3.1.10"
   }
 }

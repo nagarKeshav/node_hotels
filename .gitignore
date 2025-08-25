@@ -1,4 +1,13 @@
-# ignore all node_modules
-node_modules/
+# Dependencies
+/node_modules
+package-lock.json
 
-# other common directories to ignore
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
