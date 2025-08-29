@@ -1,29 +1,50 @@
-const express = require('express'); // CommonJS Syntax ✅
-
-const app = express()
+const express = require('express');
+const body_parser = require('body-parser');
+const passport = require('./auth');
 const db = require('./db');
 
-const body_parser = require('body-parser');
-app.use(body_parser.json()); // req.body
+const app = express();
 
-// const Person = require('./models/pearson'); // Ensure this path is correct
-// const Menu = require('./models/menu'); // Ensure this path is correct 
+// Middleware
+app.use(body_parser.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello World')
-})
+// Logging middleware
+const logRequest = (req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+};
+app.use(logRequest);
+
+// Initialize Passport
+app.use(passport.initialize());
+
+
+// Route middleware
+const localAuthMiddleware = passport.authenticate('local', { session: false });
+
+// Routes
+app.get('/', localAuthMiddleware, (_req, res) => {
+  res.send('Hello World');
+});
+
 
 const personRoute = require('./routes/personRoute');
-app.use('/person', personRoute);
 const menuItemRoute = require('./routes/menuItemRoute');
-app.use('/menu', menuItemRoute);
 
+app.use('/person', personRoute);
+app.use('/menu',  menuItemRoute);
 
-// server is listening on port 3000
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000')
-})
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 
 

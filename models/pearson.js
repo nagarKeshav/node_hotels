@@ -1,6 +1,7 @@
 const e = require('express');
 const { add } = require('lodash');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt')
 
 const personSchema = new mongoose.Schema({
  name: {
@@ -28,8 +29,33 @@ const personSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        require: true
+    },
+    password: {
+        type: String,
+        required: true  
+    }
 
 });
+
+personSchema.pre('save', async function (next) {
+    const person = this;
+
+    if(!person.isModified('password')) return next();
+    try {
+        const salt = await bcrypt.genSalt(10)
+
+        const hashedPassword = await bcrypt.hash(person.password,salt);
+
+        person.password = hashedPassword;
+
+        next()
+    } catch (error) {
+        return next(error)
+    }
+})
 
 const Person = mongoose.model('Person', personSchema);
 

@@ -7,7 +7,8 @@ const password = encodeURIComponent(process.env.MONGODB_PASSWORD);
 const cluster = process.env.MONGODB_CLUSTER;
 const dbname = process.env.MONGODB_DATABASE;
 
-const mongoURL = `mongodb+srv://${username}:${password}@${cluster}/${dbname}?retryWrites=true&w=majority`;
+// const mongoURL = `mongodb+srv://${username}:${password}@${cluster}/${dbname}?retryWrites=true&w=majority`;
+const mongoURL = `mongodb://127.0.0.1:27017/Hotel`;
 
 const connectDB = async () => {
   try {
